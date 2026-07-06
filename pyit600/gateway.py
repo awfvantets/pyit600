@@ -533,7 +533,7 @@ class IT600Gateway:
                             max_temp=(ther.get("MaxHeatSetpoint_x100", 4000) / 100) if is_heating else (ther.get("MaxCoolSetpoint_x100", 4000) / 100),
                             min_temp=(ther.get("MinHeatSetpoint_x100", 500) / 100) if is_heating else (ther.get("MinCoolSetpoint_x100", 500) / 100),
                             hvac_mode=HVAC_MODE_OFF if scomm["HoldType"] == 7 else HVAC_MODE_HEAT if ther["SystemMode"] == 4 else HVAC_MODE_COOL if ther["SystemMode"] == 3 else HVAC_MODE_AUTO,
-                            hvac_action=CURRENT_HVAC_OFF if scomm["HoldType"] == 7 else CURRENT_HVAC_IDLE if ther["RunningState"] == 0 else CURRENT_HVAC_HEAT if is_heating and ther["RunningState"] == 33 else CURRENT_HVAC_HEAT_IDLE if is_heating else CURRENT_HVAC_COOL if ther["RunningState"] == 66 else CURRENT_HVAC_COOL_IDLE,
+                            hvac_action=CURRENT_HVAC_OFF if scomm["HoldType"] == 7 else CURRENT_HVAC_HEAT if ther["RunningState"] & 1 else CURRENT_HVAC_COOL if ther["RunningState"] & 2 else CURRENT_HVAC_IDLE,
                             hvac_modes=[HVAC_MODE_OFF, HVAC_MODE_HEAT, HVAC_MODE_COOL, HVAC_MODE_AUTO],
                             preset_mode=PRESET_OFF if scomm["HoldType"] == 7 else PRESET_PERMANENT_HOLD if scomm["HoldType"] == 2 else PRESET_ECO if scomm["HoldType"] == 10 else PRESET_TEMPORARY_HOLD if scomm["HoldType"] == 1 else PRESET_FOLLOW_SCHEDULE,
                             preset_modes=[PRESET_OFF, PRESET_PERMANENT_HOLD, PRESET_ECO, PRESET_TEMPORARY_HOLD, PRESET_FOLLOW_SCHEDULE],
